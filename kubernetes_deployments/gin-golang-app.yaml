@@ -12,9 +12,10 @@ spec:
       labels:
         app: my-gin-golang-app
     spec:
+
       containers:
       - name: my-gin-golang-app
-        image: my-gin-golang-app
+        image: my-gin-golang-app:latest
         ports:
         - containerPort: 8081
 ---

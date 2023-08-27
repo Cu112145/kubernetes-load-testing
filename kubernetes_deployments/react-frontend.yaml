@@ -11,10 +11,11 @@ spec:
     metadata:
       labels:
         app: react-frontend
+
     spec:
       containers:
       - name: react-frontend
-        image: react-frontend
+        image: react-frontend:latest
         ports:
         - containerPort: 80
 ---

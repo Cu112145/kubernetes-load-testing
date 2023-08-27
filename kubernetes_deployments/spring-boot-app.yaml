@@ -12,9 +12,11 @@ spec:
       labels:
         app: my-spring-boot-app
     spec:
+    
       containers:
       - name: my-spring-boot-app
-        image: my-spring-boot-app
+        image:  my-spring-boot-app:latest
+        imagePullPolicy: IfNotPresent  # or Never
         ports:
         - containerPort: 8080
 ---

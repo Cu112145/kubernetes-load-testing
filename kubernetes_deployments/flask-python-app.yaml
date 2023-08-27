@@ -11,10 +11,12 @@ spec:
     metadata:
       labels:
         app: my-flask-python-app
+
     spec:
       containers:
       - name: my-flask-python-app
-        image: my-flask-python-app
+        image:  my-flask-python-app:latest
+        imagePullPolicy: IfNotPresent  # or Never
         ports:
         - containerPort: 8082
 ---
