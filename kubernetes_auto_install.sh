@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+# Remove or comment problematic repositories
+sudo sed -i '/cli.github.com\/packages/d' /etc/apt/sources.list.d/*.list
+
+# Remove duplicates for Kubernetes
+sudo awk '!seen[$0]++' /etc/apt/sources.list.d/kubernetes.list > temp && sudo mv temp /etc/apt/sources.list.d/kubernetes.list
+
+
 echo "Disabling swap...."
 sudo swapoff -a
 sudo sed -i.bak '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
