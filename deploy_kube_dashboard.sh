@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export KUBECONFIG=/etc/kubernetes/admin.conf
+kubectl config use-context
+
 # Function to clean up background jobs on exit
 cleanup() {
   echo "Cleaning up..."
