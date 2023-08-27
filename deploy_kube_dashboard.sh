@@ -2,6 +2,8 @@
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
 kubectl cluster-info
+kubectl config use-context kubernetes-admin@kubernetes
+
 
 # Function to clean up background jobs on exit
 cleanup() {
@@ -21,11 +23,11 @@ if lsof -Pi :8001 -sTCP:LISTEN -t >/dev/null ; then
     kill -9 $(lsof -Pi :8001 -sTCP:LISTEN -t)
 fi
 
-# Check if kubectl is available and configured
-if ! kubectl cluster-info >/dev/null 2>&1; then
-  echo "It seems like you do not have access to a Kubernetes cluster. Make sure you have kubeadmin access."
-  exit 1
-fi
+# # Check if kubectl is available and configured
+# if ! kubectl cluster-info >/dev/null 2>&1; then
+#   echo "It seems like you do not have access to a Kubernetes cluster. Make sure you have kubeadmin access."
+#   exit 1
+# fi
 
 # Get public IP address of this machine
 PUBLIC_IP_ADDRESS=$(curl -s ifconfig.me)
@@ -36,7 +38,7 @@ fi
 
 # Deploy the Kubernetes Dashboard
 echo "Deploying Kubernetes Dashboard..."
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v3.0.0-alpha0/charts/kubernetes-dashboard.yaml
 
 # Create a service account for the dashboard and get its token
 echo "Creating service account for dashboard..."
@@ -61,9 +63,9 @@ PROXY_PID=$!
 # Print the URL for the user
 echo "========================================"
 echo "Navigate to the following URL to access the Kubernetes Dashboard:"
-echo "http://${PUBLIC_IP_ADDRESS}:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
+echo "http://135.181.246.248:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
 echo "========================================"
-
+https://135.181.246.248:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 # Print the token for the user to login
 echo "Use the following token to log in to the dashboard:"
 echo "${DASHBOARD_TOKEN}"
