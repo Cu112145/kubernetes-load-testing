@@ -1,0 +1,43 @@
+---
+- name: Run Custom Module with Terraform Output
+  hosts: localhost  # or wherever your custom module needs to run
+  gather_facts: no
+  tasks:
+   
+    - name: Read output.json
+      command: cat  "{{ json_file_path }}"
+      register: json_output
+
+    - name: Deserialize JSON string to object
+      set_fact:
+        instance_info: "{{ json_output.stdout | from_json }}"
+      
+    - name: Debug JSON content
+      debug:
+        msg: "Instance ID is {{ instance_info.instance_id }}"
+
+    - name: Copy frontend directory to EC2 instance
+      synchronize:
+        src: ../frontend
+        dest: "/home/ec2-user/frontend"
+        mode: 'push'
+      delegate_to: "{{ instance_info.instance_public_ip }}"
+      vars:
+        ansible_ssh_private_key_file: "~/.ssh/my_terraform_key"
+        ansible_user: "ec2-user"
+
+    - name: Copy frontend directory to EC2 instance
+      synchronize:
+        src: ../frontend
+        dest: "/home/ec2-user/frontend"
+        'mode': 'push'
+      delegate_to: "{{ instance_info.instance_public_ip }}"
+      
+
+    - name: Run AWS SSM Run Command
+      aws_ssm_run_command:  # Assuming your custom module is named aws_ssm_run_command
+        instance_id: "{{ instance_info.instance_id }}"
+        commands:
+          - "cd /home/ec2-user/frontend"
+          - "docker-compose up --build"
+        region: "us-east-1"  # Update this as necessary

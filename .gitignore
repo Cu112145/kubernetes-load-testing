@@ -1,0 +1,46 @@
+# Node.js / npm
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# React Build
+build/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ansible
+.retry
+*.retry
+*.vault
+
+# Secret and config files
+.env
+.secrets
+
+# Compiled Files
+*.pyc
+*.class
+*.dll
+*.exe
+*.o
+*.so
