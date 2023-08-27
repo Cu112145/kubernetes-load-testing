@@ -1,26 +1,35 @@
 #!/bin/bash
 
-# Function to check if a port is in use and kill the process using it
-check_and_kill_port() {
-  PORT=$1
-  PID=$(sudo lsof -t -i:$PORT)
-  if [ ! -z "$PID" ]; then
-    echo "Port $PORT is in use. Killing the process..."
-    sudo kill -9 $PID
-  else
-    echo "Port $PORT is available."
+# Function to clean up background jobs on exit
+cleanup() {
+  echo "Cleaning up..."
+  if [[ ! -z "${PROXY_PID}" ]]; then
+    kill -9 ${PROXY_PID}
   fi
+  echo "Done."
 }
 
-# Check if port 8001 is in use
-check_and_kill_port 8001
+# Trap cleanup function on script exit
+trap cleanup EXIT
+
+# Check if port 8001 is in use and kill it if necessary
+if lsof -Pi :8001 -sTCP:LISTEN -t >/dev/null ; then
+    echo "Port 8001 is in use. Killing the process..."
+    kill -9 $(lsof -Pi :8001 -sTCP:LISTEN -t)
+fi
+
+# Check if kubectl is available and configured
+if ! kubectl cluster-info >/dev/null 2>&1; then
+  echo "It seems like you do not have access to a Kubernetes cluster. Make sure you have kubeadmin access."
+  exit 1
+fi
 
 # Get public IP address of this machine
 PUBLIC_IP_ADDRESS=$(curl -s ifconfig.me)
-# Fallback to another service if the above fails
-[ -z "$PUBLIC_IP_ADDRESS" ] && PUBLIC_IP_ADDRESS=$(curl -s api.ipify.org)
-# Fallback to localhost if all fail
-[ -z "$PUBLIC_IP_ADDRESS" ] && PUBLIC_IP_ADDRESS="localhost"
+if [ -z "$PUBLIC_IP_ADDRESS" ]; then
+    echo "Could not determine public IP address."
+    exit 1
+fi
 
 # Deploy the Kubernetes Dashboard
 echo "Deploying Kubernetes Dashboard..."
@@ -44,6 +53,7 @@ echo "Dashboard Token: ${DASHBOARD_TOKEN}"
 # Forward the dashboard to a port so you can access it
 echo "Starting kubectl proxy in the background..."
 kubectl proxy &
+PROXY_PID=$!
 
 # Print the URL for the user
 echo "========================================"
