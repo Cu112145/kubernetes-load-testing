@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Get public IP address of this machine
+PUBLIC_IP_ADDRESS=$(curl -s ifconfig.me)
+
 # Deploy the Kubernetes Dashboard
 echo "Deploying Kubernetes Dashboard..."
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
@@ -23,14 +26,11 @@ echo "Dashboard Token: ${DASHBOARD_TOKEN}"
 echo "Starting kubectl proxy in the background..."
 kubectl proxy &
 
-# Optional: Open the dashboard in the default browser
-# This assumes xdg-open is available, but you could use gnome-open or just manually open the URL
-echo "Attempting to open the dashboard in your default browser..."
-xdg-open "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
-
-# You can also print the URL and ask the user to open it themselves
-echo "You can manually open the Kubernetes dashboard by visiting:"
-echo "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
+# Print the URL for the user
+echo "========================================"
+echo "Navigate to the following URL to access the Kubernetes Dashboard:"
+echo "http://${PUBLIC_IP_ADDRESS}:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
+echo "========================================"
 
 # Print the token for the user to login
 echo "Use the following token to log in to the dashboard:"
