@@ -1,7 +1,26 @@
 #!/bin/bash
 
+# Function to check if a port is in use and kill the process using it
+check_and_kill_port() {
+  PORT=$1
+  PID=$(sudo lsof -t -i:$PORT)
+  if [ ! -z "$PID" ]; then
+    echo "Port $PORT is in use. Killing the process..."
+    sudo kill -9 $PID
+  else
+    echo "Port $PORT is available."
+  fi
+}
+
+# Check if port 8001 is in use
+check_and_kill_port 8001
+
 # Get public IP address of this machine
 PUBLIC_IP_ADDRESS=$(curl -s ifconfig.me)
+# Fallback to another service if the above fails
+[ -z "$PUBLIC_IP_ADDRESS" ] && PUBLIC_IP_ADDRESS=$(curl -s api.ipify.org)
+# Fallback to localhost if all fail
+[ -z "$PUBLIC_IP_ADDRESS" ] && PUBLIC_IP_ADDRESS="localhost"
 
 # Deploy the Kubernetes Dashboard
 echo "Deploying Kubernetes Dashboard..."
