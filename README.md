@@ -1,5 +1,8 @@
 # kubernetes-load-testing
 
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
 kubectl apply -f .
 kubectl describe services
 kubectl describe pods 
