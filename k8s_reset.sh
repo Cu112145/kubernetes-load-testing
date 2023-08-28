@@ -23,17 +23,3 @@ containerd ctr -n=k8s.io c ls -q | xargs -r containerd ctr -n=k8s.io c rm
 iptables --flush
 iptables -tnat --flush
 
-# If you had set any ipvs rules
-# ipvsadm --clear
-
-# Re-initialize
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket /run/containerd/containerd.sock --apiserver-advertise-address=135.181.246.248
-
-# Reload services
-systemctl daemon-reload
-systemctl start kubelet
-systemctl start docker
-systemctl start containerd
-
-# Reminder to check logs
-echo "Remember to check the logs of failing components if the cluster does not initialize correctly."
