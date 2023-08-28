@@ -13,7 +13,7 @@ kubectl get deployments
 kubectl get services
 
 kubectl get pods --all-namespaces
-kubectl logs v1-app-release-postgres-54948c86bd-8m5nx
+kubectl logs  v1-app-release-gin-golang-app-7d8895dbb8-sjxdk
 
 
 kubectl delete deployment my-spring-boot-app
@@ -22,7 +22,7 @@ kubectl describe pod my-flask-python-app
 
 kubectl port-forward svc/my-flask-python-app 8082:8082
 
-./build_and_load_images.sh my-spring-boot-app:latest my-gin-golang-app:latest my-flask-python-app:latest postgresdb:latest react-frontend:latest ansible-terraform:latest\n
+./build_and_load_images.sh spring-boot-app:latest gin-golang-app:latest flask-python-app:latest postgresdb:latest react-frontend:latest ansible-terraform:latest\n
 
 kubectl apply -f kubernetes_deployments/
 
