@@ -39,12 +39,22 @@ do
   fi
 done
 
+# Get IPv4 public address of this machine
+PUBLIC_IP_ADDRESS=$(curl -s ifconfig.me)
+if [ -z "$PUBLIC_IP_ADDRESS" ]; then
+  # Alternative methods to fetch the IPv4 address
+  PUBLIC_IP_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
+  if [ -z "$PUBLIC_IP_ADDRESS" ]; then
+    PUBLIC_IP_ADDRESS=$(wget -qO- http://ipecho.net/plain)
+  fi
+fi
+
 if [ -z "$PUBLIC_IP_ADDRESS" ]; then
   echo "Could not determine public IP address."
   exit 1
-else
-  echo "Public IP Address: $PUBLIC_IP_ADDRESS"
 fi
+
+echo "Public IPv4 address of this machine is: ${PUBLIC_IP_ADDRESS}"
 
 # Deploy the Kubernetes Dashboard
 echo "Deploying Kubernetes Dashboard..."
