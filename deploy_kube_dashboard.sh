@@ -8,6 +8,14 @@ kubectl config use-context kubernetes-admin@kubernetes
 # Update package lists
 apt update
 
+# Check if a Helm release called 'my-dashboard' exists in the 'kube-system' namespace
+helm status my-dashboard --namespace kube-system > /dev/null 2>&1
+if [ $? -eq 0 ]; then
+  echo "Helm release 'my-dashboard' already exists. Uninstalling..."
+  helm uninstall my-dashboard --namespace kube-system
+fi
+
+
 # Install Helm if it's not installed
 if ! command -v helm &> /dev/null; then
   echo "Installing Helm..."
@@ -25,6 +33,7 @@ helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
 helm repo update
 
 # Install Kubernetes Dashboard
+echo "Installing Kubernetes Dashboard..."
 helm install my-dashboard kubernetes-dashboard/kubernetes-dashboard --namespace kube-system
 
 # Create service account and cluster role binding
