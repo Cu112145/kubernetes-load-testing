@@ -73,9 +73,9 @@ PROXY_PID=$!
 # Print the URL for the user
 echo "========================================"
 echo "Navigate to the following URL to access the Kubernetes Dashboard:"
-echo "http://135.181.246.248:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
+echo "http://$PUBLIC_IP_ADDRESS:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
 echo "========================================"
-https://135.181.246.248:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
 # Print the token for the user to login
 echo "Use the following token to log in to the dashboard:"
 echo "${DASHBOARD_TOKEN}"
