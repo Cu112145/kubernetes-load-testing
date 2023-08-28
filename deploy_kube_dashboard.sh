@@ -79,3 +79,4 @@ https://135.181.246.248:6443/api/v1/namespaces/kube-system/services/kube-dns:dns
 # Print the token for the user to login
 echo "Use the following token to log in to the dashboard:"
 echo "${DASHBOARD_TOKEN}"
+
