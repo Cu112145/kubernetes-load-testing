@@ -1,9 +1,10 @@
 #!/bin/bash
 
+#!/bin/bash
+
 export KUBECONFIG=/etc/kubernetes/admin.conf
 kubectl cluster-info
 kubectl config use-context kubernetes-admin@kubernetes
-
 
 # Function to clean up background jobs on exit
 cleanup() {
@@ -29,11 +30,20 @@ if ! kubectl cluster-info >/dev/null 2>&1; then
   exit 1
 fi
 
-# Get public IP address of this machine
-PUBLIC_IP_ADDRESS=$(curl -s ifconfig.me)
+# Try to get the public IP address using different methods
+for method in "ifconfig.me" "ipecho.net/plain" "ident.me"
+do
+  PUBLIC_IP_ADDRESS=$(curl -s $method)
+  if [ -n "$PUBLIC_IP_ADDRESS" ]; then
+    break
+  fi
+done
+
 if [ -z "$PUBLIC_IP_ADDRESS" ]; then
-    echo "Could not determine public IP address."
-    exit 1
+  echo "Could not determine public IP address."
+  exit 1
+else
+  echo "Public IP Address: $PUBLIC_IP_ADDRESS"
 fi
 
 # Deploy the Kubernetes Dashboard
