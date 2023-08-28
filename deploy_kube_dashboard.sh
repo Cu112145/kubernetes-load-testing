@@ -3,17 +3,17 @@
 kubectl cluster-info
 kubectl config use-context kubernetes-admin@kubernetes
 
-# Function to clean up background jobs on exit
-cleanup() {
-  echo "Cleaning up..."
-  if [[ ! -z "${PROXY_PID}" ]]; then
-    kill -9 ${PROXY_PID}
-  fi
-  echo "Done."
-}
+# # Function to clean up background jobs on exit
+# cleanup() {
+#   echo "Cleaning up..."
+#   if [[ ! -z "${PROXY_PID}" ]]; then
+#     kill -9 ${PROXY_PID}
+#   fi
+#   echo "Done."
+# }
 
-# Trap cleanup function on script exit
-trap cleanup EXIT
+# # Trap cleanup function on script exit
+# trap cleanup EXIT
 
 # Check if port 8001 is in use and kill it if necessary
 if lsof -Pi :8001 -sTCP:LISTEN -t >/dev/null ; then
