@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export KUBECONFIG=/etc/kubernetes/admin.conf
 kubectl cluster-info
 kubectl config use-context kubernetes-admin@kubernetes
 

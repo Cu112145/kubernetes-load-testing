@@ -56,7 +56,7 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 echo "Kubernetes Installation finished..."
 echo "Waiting 30 seconds for the cluster to go online..."
 sleep 30
-export KUBECONFIG=/etc/kubernetes/admin.conf
+
 echo "Testing Kubernetes namespaces... "
 kubectl get pods --all-namespaces
 echo "Testing Kubernetes nodes... "
