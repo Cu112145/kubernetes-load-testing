@@ -1,0 +1,26 @@
+# values.yaml
+
+# Define values for the my-flask-python-app deployment
+flaskPythonApp:
+  image: my-flask-python-app:latest
+  port: 8082
+
+# Define values for the gin-golang-app deployment
+ginGolangApp:
+  image: my-gin-golang-app:latest
+  port: 8081
+
+# Define values for the postgres deployment
+postgres:
+  image: postgres:latest
+  port: 5432
+
+# Define values for the react-frontend deployment
+reactFrontend:
+  image: react-frontend:latest
+  port: 80
+
+# Define values for the spring-boot-app deployment
+springBootApp:
+  image: my-spring-boot-app:latest
+  port: 8080
