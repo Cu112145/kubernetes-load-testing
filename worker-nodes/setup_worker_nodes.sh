@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build the Docker image using the Dockerfile in the worker-nodes directory
-docker build -t kubelet-container ./worker-nodes
+docker build -t kubelet-container .
 
 # Start multiple Docker containers with different worker names
 worker_names=(
