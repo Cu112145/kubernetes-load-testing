@@ -23,11 +23,11 @@ if lsof -Pi :8001 -sTCP:LISTEN -t >/dev/null ; then
     kill -9 $(lsof -Pi :8001 -sTCP:LISTEN -t)
 fi
 
-# # Check if kubectl is available and configured
-# if ! kubectl cluster-info >/dev/null 2>&1; then
-#   echo "It seems like you do not have access to a Kubernetes cluster. Make sure you have kubeadmin access."
-#   exit 1
-# fi
+# Check if kubectl is available and configured
+if ! kubectl cluster-info >/dev/null 2>&1; then
+  echo "It seems like you do not have access to a Kubernetes cluster. Make sure you have kubeadmin access."
+  exit 1
+fi
 
 # Get public IP address of this machine
 PUBLIC_IP_ADDRESS=$(curl -s ifconfig.me)
