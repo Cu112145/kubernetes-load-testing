@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 export KUBECONFIG=/etc/kubernetes/admin.conf
 kubectl cluster-info
 kubectl config use-context kubernetes-admin@kubernetes
@@ -26,32 +24,15 @@ fi
 
 # Check if kubectl is available and configured
 if ! kubectl cluster-info >/dev/null 2>&1; then
-  echo "It seems like you do not have access to a Kubernetes cluster. Make sure you have kubeadmin access."
+  echo "It seems like you do not have access to a Kubernetes cluster. Make sure you have kubeadm access."
   exit 1
 fi
 
-# Try to get the public IP address using different methods
-for method in "ifconfig.me" "ipecho.net/plain" "ident.me"
-do
-  PUBLIC_IP_ADDRESS=$(curl -s $method)
-  if [ -n "$PUBLIC_IP_ADDRESS" ]; then
-    break
-  fi
-done
-
-# Get IPv4 public address of this machine
+# Try to get the public IP address
 PUBLIC_IP_ADDRESS=$(curl -4 -s ifconfig.me)
 if [ -z "$PUBLIC_IP_ADDRESS" ]; then
-  # Alternative methods to fetch the IPv4 address
-  PUBLIC_IP_ADDRESS=$(dig +short -4 myip.opendns.com @resolver1.opendns.com)
-  if [ -z "$PUBLIC_IP_ADDRESS" ]; then
-    PUBLIC_IP_ADDRESS=$(wget -4 -qO- http://ipecho.net/plain)
-  fi
-fi
-
-if [ -z "$PUBLIC_IP_ADDRESS" ]; then
-  echo "Could not determine public IP address."
-  exit 1
+    echo "Could not determine public IPv4 address."
+    exit 1
 fi
 
 echo "Public IPv4 address of this machine is: ${PUBLIC_IP_ADDRESS}"
@@ -77,7 +58,7 @@ echo "Dashboard Token: ${DASHBOARD_TOKEN}"
 
 # Forward the dashboard to a port so you can access it
 echo "Starting kubectl proxy in the background..."
-kubectl proxy &
+kubectl proxy --address='0.0.0.0' --port=8001 &
 PROXY_PID=$!
 
 # Print the URL for the user
@@ -89,4 +70,3 @@ echo "========================================"
 # Print the token for the user to login
 echo "Use the following token to log in to the dashboard:"
 echo "${DASHBOARD_TOKEN}"
-
