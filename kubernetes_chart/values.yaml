@@ -13,7 +13,16 @@ ginGolangApp:
 # Define values for the postgres deployment
 postgres:
   image: postgres:latest
+  imagePullPolicy: IfNotPresent
   port: 5432
+  storageSize: 1Gi
+  replicas: 1
+  password: root
+  username: root
+  databse: mydatabase
+
+
+
 
 # Define values for the react-frontend deployment
 reactFrontend:

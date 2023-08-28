@@ -9,3 +9,4 @@ spec:
     - protocol: TCP
       port: {{ .Values.postgres.port }}
       targetPort: {{ .Values.postgres.port }}
+  
