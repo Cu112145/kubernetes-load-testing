@@ -45,6 +45,7 @@ sudo apt-mark hold kubelet kubeadm kubectl
 echo "Initializing Kubernetes..."
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket /run/containerd/containerd.sock
 
+sudo kubeadm reset & kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket /run/containerd/containerd.sock
 # echo "Configuring kubectl..."
 # mkdir -p $HOME/.kube
 # sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
