@@ -15,16 +15,16 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] || [ -z "$4" ] || [ -z "$5" ] || [ 
 fi
 
 # Build Spring Boot Java application
-build_image "./my-spring-boot-app" $1
+build_image "./spring-boot-app" $1
 
 # Build Gin Golang application
-build_image "./my-gin-golang-app" $2
+build_image "./gin-golang-app" $2
 
 # Build Flask Python application
-build_image "./my_flask_app" $3
+build_image "./flask-python-app" $3
 
 # Build PostgreSQL database service
-build_image "./my_postgres_image" $4
+build_image "./postgresdb" $4
 
 # Build React Frontend
 build_image "./frontend" $5
