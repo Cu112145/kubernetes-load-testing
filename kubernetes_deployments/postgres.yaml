@@ -1,7 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgresdb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # adjust the storage size as needed
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgresdb
+  name: postgresdb-deployment
 spec:
   replicas: 1
   selector:
@@ -12,6 +23,10 @@ spec:
       labels:
         app: postgresdb
     spec:
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgresdb-pvc
       containers:
       - name: postgresdb
         image: postgresdb:latest
@@ -25,11 +40,14 @@ spec:
           value: "mydatabase"
         ports:
         - containerPort: 5432
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data  # adjust the mount path as needed
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgresdb
+  name: postgresdb-service
 spec:
   selector:
     app: postgresdb

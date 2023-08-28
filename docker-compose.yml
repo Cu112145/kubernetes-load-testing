@@ -1,64 +1,64 @@
-version: '3.7'
+  version: '3.7'
 
-services:
+  services:
 
-  # Spring Boot Java application
-  my-spring-boot-app:
-    build: ./my-spring-boot-app # Path to your Spring Boot project
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgresdb
+    # Spring Boot Java application
+    my-spring-boot-app:
+      build: ./my-spring-boot-app # Path to your Spring Boot project
+      ports:
+        - "8080:8080"
+      depends_on:
+        - postgresdb
 
-  # Gin Golang application
-  my-gin-golang-app:
-    build: ./my-gin-golang-app # Path to your Golang Gin project
-    ports:
-      - "8081:8081"
-    depends_on:
-      - postgresdb
+    # Gin Golang application
+    my-gin-golang-app:
+      build: ./my-gin-golang-app # Path to your Golang Gin project
+      ports:
+        - "8081:8081"
+      depends_on:
+        - postgresdb
 
-  # Django Python application
-  my-flask-python-app:
-    build: ./my_flask_app # Path to your Django project
-    ports:
-      - "8082:8082"
-    depends_on:
-      - postgresdb
+    # Django Python application
+    my-flask-python-app:
+      build: ./my_flask_app # Path to your Django project
+      ports:
+        - "8082:8082"
+      depends_on:
+        - postgresdb
 
-  # PostgreSQL database service
-  postgresdb:
-    build: ./my_postgres_image # Building the PostgreSQL image from the local directory
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: mydatabase
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      
-  # React Frontend
-  react-frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    container_name: react-frontend-container
-    restart: unless-stopped
+    # PostgreSQL database service
+    postgresdb:
+      build: ./my_postgres_image # Building the PostgreSQL image from the local directory
+      environment:
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: root
+        POSTGRES_DB: mydatabase
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+        
+    # React Frontend
+    react-frontend:
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile
+      ports:
+        - "80:80"
+      container_name: react-frontend-container
+      restart: unless-stopped
 
-  # Ansible and Terraform
-  ansible-terraform:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./workspace:/workspace
-      - ./ansible:/ansible
-    environment:
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-    stdin_open: true
-    tty: true
+    # Ansible and Terraform
+    ansible-terraform:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      volumes:
+        - ./workspace:/workspace
+        - ./ansible:/ansible
+      environment:
+        AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+        AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      stdin_open: true
+      tty: true
 
-volumes:
-  postgres_data: # Named volume for Postgres data
+  volumes:
+    postgres_data: # Named volume for Postgres data
