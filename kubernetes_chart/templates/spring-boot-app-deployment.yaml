@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-spring-boot-app
+spec:
+  replicas: {{ .Values.springBootApp.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-spring-boot-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-spring-boot-app
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-spring-boot-app
+        image: {{ .Values.springBootApp.image }}
+        imagePullPolicy: {{ .Values.springBootApp.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.springBootApp.port }}

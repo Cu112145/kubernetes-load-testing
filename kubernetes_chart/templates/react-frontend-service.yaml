@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-react-frontend
+spec:
+  selector:
+    app: {{ .Release.Name }}-react-frontend
+  ports:
+    - protocol: TCP
+      port: {{ .Values.reactFrontend.port }}
+      targetPort: {{ .Values.reactFrontend.targetPort }}

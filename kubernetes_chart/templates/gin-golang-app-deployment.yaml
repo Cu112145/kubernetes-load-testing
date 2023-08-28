@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-gin-golang-app
+spec:
+  replicas: {{ .Values.ginGolangApp.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-gin-golang-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-gin-golang-app
+    spec:
+      containers:
+      - name: {{ .Values.ginGolangApp.name }}
+        image: {{ .Values.ginGolangApp.image }}
+        imagePullPolicy: {{ .Values.ginGolangApp.imagePullPolicy }}
+        ports:
+        - containerPort: {{ .Values.ginGolangApp.containerPort }}
