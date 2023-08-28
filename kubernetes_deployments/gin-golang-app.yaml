@@ -16,6 +16,7 @@ spec:
       containers:
       - name: my-gin-golang-app
         image: my-gin-golang-app:latest
+        imagePullPolicy: IfNotPresent  # or Never
         ports:
         - containerPort: 8081
 ---
