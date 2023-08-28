@@ -33,3 +33,5 @@ build_image "./frontend" $5
 build_image "." $6
 
 echo "All Docker images built successfully."
+
+minikube image load $1 $2 $3 $4 $5
