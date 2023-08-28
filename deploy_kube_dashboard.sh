@@ -40,12 +40,12 @@ do
 done
 
 # Get IPv4 public address of this machine
-PUBLIC_IP_ADDRESS=$(curl -s ifconfig.me)
+PUBLIC_IP_ADDRESS=$(curl -4 -s ifconfig.me)
 if [ -z "$PUBLIC_IP_ADDRESS" ]; then
   # Alternative methods to fetch the IPv4 address
-  PUBLIC_IP_ADDRESS=$(dig +short myip.opendns.com @resolver1.opendns.com)
+  PUBLIC_IP_ADDRESS=$(dig +short -4 myip.opendns.com @resolver1.opendns.com)
   if [ -z "$PUBLIC_IP_ADDRESS" ]; then
-    PUBLIC_IP_ADDRESS=$(wget -qO- http://ipecho.net/plain)
+    PUBLIC_IP_ADDRESS=$(wget -4 -qO- http://ipecho.net/plain)
   fi
 fi
 
