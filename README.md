@@ -1,5 +1,7 @@
 # kubernetes-load-testing
 
+helm install v1-app-release kubernetes_chart/
+helm uninstall v1-app-release
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
@@ -11,6 +13,7 @@ kubectl get deployments
 kubectl get services
 
 kubectl get pods --all-namespaces
+kubectl logs v1-app-release-postgres-54948c86bd-8m5nx
 
 
 kubectl delete deployment my-spring-boot-app
