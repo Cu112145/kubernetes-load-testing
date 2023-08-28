@@ -3,69 +3,65 @@
 kubectl cluster-info
 kubectl config use-context kubernetes-admin@kubernetes
 
-# # Function to clean up background jobs on exit
-# cleanup() {
-#   echo "Cleaning up..."
-#   if [[ ! -z "${PROXY_PID}" ]]; then
-#     kill -9 ${PROXY_PID}
-#   fi
-#   echo "Done."
-# }
+#!/bin/bash
 
-# # Trap cleanup function on script exit
-# trap cleanup EXIT
+# Update package lists
+apt update
 
-# Check if port 8001 is in use and kill it if necessary
-if lsof -Pi :8001 -sTCP:LISTEN -t >/dev/null ; then
-    echo "Port 8001 is in use. Killing the process..."
-    kill -9 $(lsof -Pi :8001 -sTCP:LISTEN -t)
+# Install Helm if it's not installed
+if ! command -v helm &> /dev/null; then
+  echo "Installing Helm..."
+  curl https://baltocdn.com/helm/signing.asc | apt-key add -
+  apt install apt-transport-https --yes
+  echo "deb https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
+  apt update
+  apt install helm
 fi
 
-# Check if kubectl is available and configured
-if ! kubectl cluster-info >/dev/null 2>&1; then
-  echo "It seems like you do not have access to a Kubernetes cluster. Make sure you have kubeadm access."
-  exit 1
-fi
+# Add the Kubernetes Dashboard repository
+helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
 
-# Try to get the public IP address
-PUBLIC_IP_ADDRESS=$(curl -4 -s ifconfig.me)
-if [ -z "$PUBLIC_IP_ADDRESS" ]; then
-    echo "Could not determine public IPv4 address."
-    exit 1
-fi
+# Update Helm repositories
+helm repo update
 
-echo "Public IPv4 address of this machine is: ${PUBLIC_IP_ADDRESS}"
+# Install Kubernetes Dashboard
+helm install my-dashboard kubernetes-dashboard/kubernetes-dashboard --namespace kube-system
 
-# Deploy the Kubernetes Dashboard
-echo "Deploying Kubernetes Dashboard..."
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v3.0.0-alpha0/charts/kubernetes-dashboard.yaml
+# Create service account and cluster role binding
+cat <<EOL | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dashboard-admin-sa
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: dashboard-admin-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: dashboard-admin-sa
+  namespace: kube-system
+EOL
 
-# Create a service account for the dashboard and get its token
-echo "Creating service account for dashboard..."
-kubectl create serviceaccount dashboard-admin-sa
+# Get token for dashboard login
+DASHBOARD_TOKEN=$(kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep dashboard-admin-sa | awk '{print $1}') | grep "^token:" | awk '{print $2}')
 
-echo "Creating ClusterRoleBinding for dashboard..."
-kubectl create clusterrolebinding dashboard-admin-sa \
-  --clusterrole=cluster-admin \
-  --serviceaccount=default:dashboard-admin-sa
+echo "Dashboard Token: $DASHBOARD_TOKEN"
 
-# Fetch the token for the dashboard
-echo "Fetching the dashboard token..."
-DASHBOARD_TOKEN=$(kubectl describe secret $(kubectl -n default get secret | grep dashboard-admin-sa | awk '{print $1}') | grep "token:" | awk '{print $2}')
-
-echo "Dashboard Token: ${DASHBOARD_TOKEN}"
-
-# Forward the dashboard to a port so you can access it
-echo "Starting kubectl proxy in the background..."
-kubectl proxy --address='0.0.0.0' --port=8001 &
+# Run kubectl proxy in background to allow remote access
+kubectl proxy --address='0.0.0.0' --accept-hosts='^*$' &
 PROXY_PID=$!
 
-# Print the URL for the user
-echo "========================================"
-echo "Navigate to the following URL to access the Kubernetes Dashboard:"
-echo "http://$PUBLIC_IP_ADDRESS:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"
-echo "========================================"
-
-# Print the token for the user to login
-echo "Use the following token to log in to the dashboard:"
-echo "${DASHBOARD_TOKEN}"
+# Output instructions for accessing dashboard remotely
+echo "==================================================================="
+echo "To access the dashboard, navigate to:"
+echo "http://<Server_Public_IP>:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/"
+echo "Use the following token to log in:"
+echo "$DASHBOARD_TOKEN"
+echo "==================================================================="
