@@ -13,8 +13,8 @@ spec:
         app: {{ .Release.Name }}-gin-golang-app
     spec:
       containers:
-      - name: {{ .Values.ginGolangApp.name }}
+      - name: {{ .Release.Name }}-gin-golang-app
         image: {{ .Values.ginGolangApp.image }}
         imagePullPolicy: {{ .Values.ginGolangApp.imagePullPolicy }}
         ports:
-        - containerPort: {{ .Values.ginGolangApp.containerPort }}
+        - containerPort: {{ .Values.ginGolangApp.port }}
