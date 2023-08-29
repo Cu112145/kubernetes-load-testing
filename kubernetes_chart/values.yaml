@@ -2,12 +2,12 @@
 
 # Define values for the my-flask-python-app deployment
 flaskPythonApp:
-  image: my-flask-python-app:latest
+  image: flask-python-app:latest
   port: 8082
 
 # Define values for the gin-golang-app deployment
 ginGolangApp:
-  image: my-gin-golang-app:latest
+  image: gin-golang-app:latest
   port: 8081
 
 # Define values for the postgres deployment
@@ -31,5 +31,5 @@ reactFrontend:
 
 # Define values for the spring-boot-app deployment
 springBootApp:
-  image: my-spring-boot-app:latest
+  image: spring-boot-app:latest
   port: 8080
