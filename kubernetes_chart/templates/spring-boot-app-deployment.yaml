@@ -15,6 +15,6 @@ spec:
       containers:
       - name: {{ .Release.Name }}-spring-boot-app
         image: {{ .Values.springBootApp.image }}
-        imagePullPolicy: {{ .Values.springBootApp.imagePullPolicy }}
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: {{ .Values.springBootApp.port }}
