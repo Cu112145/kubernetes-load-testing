@@ -15,6 +15,6 @@ spec:
       containers:
       - name: {{ .Release.Name }}-gin-golang-app
         image: {{ .Values.ginGolangApp.image }}
-        imagePullPolicy: {{ .Values.ginGolangApp.imagePullPolicy }}
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: {{ .Values.ginGolangApp.port }}
