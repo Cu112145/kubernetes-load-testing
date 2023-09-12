@@ -1,34 +1,20 @@
-# templates/flask-python-app.yaml
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-flask-python-app
+  name: {{ .Release.Name }}-flask-python-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: my-flask-python-app
+      app: {{ .Release.Name }}-flask-python-app
   template:
     metadata:
       labels:
-        app: my-flask-python-app
+        app: {{ .Release.Name }}-flask-python-app
     spec:
       containers:
-      - name: my-flask-python-app
+      - name: {{ .Release.Name }}-flask-python-app
         image: {{ .Values.flaskPythonApp.image }}
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: {{ .Values.flaskPythonApp.port }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-flask-python-app
-spec:
-  selector:
-    app: my-flask-python-app
-  ports:
-    - protocol: TCP
-      port: {{ .Values.flaskPythonApp.port }}
-      targetPort: {{ .Values.flaskPythonApp.port }}

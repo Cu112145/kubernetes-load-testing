@@ -1,26 +1,5 @@
 # templates/flask-python-app-deployment.yaml
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: {{ .Release.Name }}-flask-python-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: {{ .Release.Name }}-flask-python-app
-  template:
-    metadata:
-      labels:
-        app: {{ .Release.Name }}-flask-python-app
-    spec:
-      containers:
-      - name: {{ .Release.Name }}-flask-python-app
-        image: {{ .Values.flaskPythonApp.image }}
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: {{ .Values.flaskPythonApp.port }}
----
 apiVersion: v1
 kind: Service
 metadata:
