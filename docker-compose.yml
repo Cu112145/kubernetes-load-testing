@@ -28,7 +28,7 @@
 
     # PostgreSQL database service
     postgresdb:
-      build: ./my_postgres_image # Building the PostgreSQL image from the local directory
+      build: ./postgresdb # Building the PostgreSQL image from the local directory
       environment:
         POSTGRES_USER: root
         POSTGRES_PASSWORD: root
