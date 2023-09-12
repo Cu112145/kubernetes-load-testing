@@ -1,7 +1,8 @@
 # kubernetes-load-testing
 
-helm install v1-app-release kubernetes_chart/
-helm uninstall v1-app-release
+helm install v1-app-release kubernetes_chart/ -n app-v1
+helm uninstall v1-app-release -n app-v1
+
 
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
@@ -28,5 +29,8 @@ kubectl apply -f kubernetes_deployments/
 
 minikube dashboard
 
-ssh -L 8080:127.0.0.1:36723 root@135.181.246.248
+ssh -L 8080:10.105.104.215:80 root@135.181.246.248
+ssh -L 43501:127.0.0.1:43501 root@135.181.246.248
+
+ssh -L 8080:127.0.0.1:44989 root@135.181.246.248
 ssh -L 30022:192.168.49.2:30022 root@135.181.246.248

@@ -15,5 +15,6 @@ spec:
       containers:
         - name: {{ .Release.Name }}-react-frontend
           image: {{ .Values.reactFrontend.image }}
+          imagePullPolicy: IfNotPresent 
           ports:
             - containerPort: {{ .Values.reactFrontend.containerPort }}
