@@ -21,13 +21,12 @@ postgres:
   username: root
   databse: mydatabase
 
-
-
-
 # Define values for the react-frontend deployment
 reactFrontend:
-  image: react-frontend:latest
   port: 80
+  targetPort: 80
+  containerPort: 80
+  image: react-frontend:latest
 
 # Define values for the spring-boot-app deployment
 springBootApp:

@@ -3,18 +3,17 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-react-frontend
 spec:
-  replicas: {{ .Values.reactFrontend.replicas }}
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-react-frontend
+      app: {{ .Release.Name }}-react-frontend  # This line should match the line in your Service selector
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-react-frontend
+        app: {{ .Release.Name }}-react-frontend  # And this line
     spec:
       containers:
-      - name: {{ .Release.Name }}-react-frontend
-        image: {{ .Values.reactFrontend.image }}
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: {{ .Values.reactFrontend.port }}
+        - name: {{ .Release.Name }}-react-frontend
+          image: {{ .Values.reactFrontend.image }}
+          ports:
+            - containerPort: {{ .Values.reactFrontend.containerPort }}

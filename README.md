@@ -13,7 +13,7 @@ kubectl get deployments
 kubectl get services
 
 kubectl get pods --all-namespaces
-kubectl logs  v1-app-release-gin-golang-app-7d8895dbb8-sjxdk
+kubectl logs v1-app-release-gin-golang-app-f8fc4d96f-n9nqt
 
 
 kubectl delete deployment my-spring-boot-app

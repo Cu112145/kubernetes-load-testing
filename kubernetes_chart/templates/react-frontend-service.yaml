@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-react-frontend
 spec:
   selector:
-    app: {{ .Release.Name }}-react-frontend
+    app: {{ .Release.Name }}-react-frontend  # This line selects pods with the label app=<release-name>-react-frontend
   ports:
     - protocol: TCP
       port: {{ .Values.reactFrontend.port }}
