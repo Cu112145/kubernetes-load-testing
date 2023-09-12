@@ -28,6 +28,8 @@ reactFrontend:
   containerPort: 80
   image: react-frontend:latest
 
+
+
 # Define values for the spring-boot-app deployment
 springBootApp:
   image: spring-boot-app:latest

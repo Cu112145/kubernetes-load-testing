@@ -11,6 +11,7 @@ function App() {
     try {
       const response = await fetch('http://my-flask-python-app:8082/ping');
       const data = await response.json();
+      // {'some': 2, 'text': 2, 'repeats': 2, 'more': 1, 'and': 1, 'less': 1}
       setFlaskResponse(data.message);
     } catch (error) {
       console.error(error);
@@ -27,6 +28,13 @@ function App() {
     }
   };
 
+  const mapWordsToList = async () => {
+    return <ul>
+      object.entries 
+      <li>key: value</li>
+    </ul>
+  };
+
   const fetchSpringData = async () => {
     try {
       const response = await fetch('http://my-spring-boot-app:8080/ping');
@@ -36,7 +44,6 @@ function App() {
       console.error(error);
     }
   };
-
   return (
     <div className="App">
       <header className="App-header">
@@ -44,6 +51,7 @@ function App() {
         <p>Edit <code>src/App.js</code> and save to reload.</p>
         <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">Learn React</a>
         <button onClick={fetchFlaskData}>Fetch Flask Data</button>
+        <> {mapWordsToList()} </>
         <p>Flask Response: {flaskResponse}</p>
         <button onClick={fetchGinData}>Fetch GIN Data</button>
         <p>GIN Response: {ginResponse}</p>
